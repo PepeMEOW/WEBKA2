@@ -40,6 +40,7 @@ def author():
 @app.route('/image')
 def image():
     path = url_for("static", filename="Slon.jpg")
+    css = url_for("static", filename="lab1.css")
     return'''
 <!doctype html>
 <html>
