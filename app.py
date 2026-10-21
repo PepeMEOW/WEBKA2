@@ -176,3 +176,24 @@ def code_405():
 def code_418():
     return "<h1>418 I'm a teapot</h1><p>Я чайник.</p>", 418
 
+@app.errorhandler(404)
+def not_found(err):
+    img = url_for("static", filename="404.jpg")
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>Страница не найдена</title>
+        <style>
+            body { background: #fff4e6; text-align: center; font-family: Arial, sans-serif; }
+            h1 { font-size: 64px; }
+            img { width: 400px; }
+        </style>
+    </head>
+    <body>
+        <h1>404</h1>
+        <p>Упс! Такой страницы у нас нет.</p>
+        <img src="''' + img + '''">
+        <p><a href="/">На главную</a></p>
+    </body>
+</html>
+''', 404
