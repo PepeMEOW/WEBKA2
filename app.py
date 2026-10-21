@@ -37,22 +37,35 @@ def author():
             </body>
         </html>"""
 
-@app.route('/lab1/image')
-def image():
+def image_page(title, lang):
     path = url_for("static", filename="Slon.jpg")
     css = url_for("static", filename="lab1.css")
-    return'''
-<!doctype html>
-<html>
+    return '''<!doctype html>
+<html lang="''' + lang + '''">
     <head>
-         <link rel="stylesheet" href="''' + css + '''">
+        <link rel="stylesheet" href="''' + css + '''">
     </head>
     <body>
-        <h1>Слон</h1>
-        <img src="'''+ path +'''">
+        <h1>''' + title + '''</h1>
+        <img src="''' + path + '''">
     </body>
 </html>
 '''
+
+@app.route("/lab1/image")
+def image():
+    return image_page("Слон", "ru"), 200, {
+        'Content-Language': 'ru', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
+
+@app.route("/lab1/image/en")
+def image_en():
+    return image_page("Elephant", "en"), 200, {
+        'Content-Language': 'en', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
+
+@app.route("/lab1/image/de")
+def image_de():
+    return image_page("Elefant", "de"), 200, {
+        'Content-Language': 'de', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
 
 count = 0 
 
@@ -217,6 +230,9 @@ def internal_error(err):
     </body>
 </html>
 ''', 500, {'Content-Language': 'ru'}
+
+
+
 
 
 
