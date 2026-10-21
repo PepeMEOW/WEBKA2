@@ -44,6 +44,9 @@ def image():
     return'''
 <!doctype html>
 <html>
+    <head>
+         <link rel="stylesheet" href="''' + css + '''">
+    </head>
     <body>
         <h1>Слон</h1>
         <img src="'''+ path +'''">
@@ -64,12 +67,15 @@ def counter():
     return '''
 <!doctype html>
 <html>
+    <head>
+    </head>
     <body>
        Сколько раз вы сюда заходили: ''' + str(count) + '''
        <hr>
         Дата и время: ''' + str(time) + '''<br>
         Запрошенный адрес: ''' + url + '''<br>
         Ваш IP-адрес: ''' + client_ip + '''<br>
+        <a href="/reset_counter">Очистить счётчик</a>
     </body>
 </html>
 '''
@@ -90,4 +96,16 @@ def created():
 </html>
 ''',201
 
+@app.route("/reset_counter")
+def reset_counter():
+    global count
+    count = 0
+    return '''<!doctype html>
+<html>
+    <body>
+        <h1>Счётчик очищен</h1>
+        <a href="/counter">Вернуться к счётчику</a>
+    </body>
+</html>
+'''
 
