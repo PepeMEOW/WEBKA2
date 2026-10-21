@@ -197,3 +197,26 @@ def not_found(err):
     </body>
 </html>
 ''', 404
+
+
+@app.route("/lab1/error")
+def make_error():
+    return 1 / 0
+
+@app.errorhandler(500)
+def internal_error(err):
+    return '''<!doctype html>
+<html lang="ru">
+    <head>
+        <title>Ошибка сервера</title>
+    </head>
+    <body>
+        <h1>Ошибка 500</h1>
+        <p>На сервере произошла ошибка.</p>
+        <a href="/">На главную</a>
+    </body>
+</html>
+''', 500, {'Content-Language': 'ru'}
+
+
+
