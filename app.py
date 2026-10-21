@@ -306,3 +306,14 @@ def clear_log():
 
 
 
+#Начало второй лабы
+
+@app.route('/lab2/a')
+def a():
+    return 'без слэша'
+
+@app.route('/lab2/a/')
+def a1():
+    return 'со слэшем'
+
+
