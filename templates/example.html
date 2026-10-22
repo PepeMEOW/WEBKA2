@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Соловьев Алексей. Лабораторная работа 2</title>
+    <title>{{ name }}. Лабораторная работа {{ lab_num }}</title>
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. Лабораторная работа 2
+         WEB-программирование, часть 2. Лабораторная работа {{ lab_num }}
     </header>
 
     <main>
@@ -15,7 +15,7 @@
     </main>
 
     <footer>
-        &copy; {{name}}, ФБИ-41, 3 курс, 2026
+        &copy; &copy; {{ name }}, {{ group }}, {{ course }} курс, 2026
     </footer>
 </body>
 </html>
