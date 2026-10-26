@@ -320,14 +320,14 @@ def a1():
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
 
-@app.route('/lab2/flowers/<int:flower_id>')
+@app.route('/lab2/flower/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
     else:
         return "цветок:"+ flower_list[flower_id]
 
-@app.route('/lab2/add_flower/<name>')
+@app.route('/lab2/add_flowers/<name>')
 def add_flower(name):
     flower_list.append(name)
     return f'''
@@ -342,10 +342,63 @@ def add_flower(name):
 </html>
 '''
 
+# цветок без имени  400
+@app.route('/lab2/add_flower/')
+def add_flower_empty():
+    return 'вы не задали имя цветка', 400
+
+
+# все цветы и их количество
+@app.route('/lab2/all_flowers')
+def all_flowers():
+    return f'''<!doctype html>
+<html>
+    <body>
+        <h1>Все цветы</h1>
+        <p>Всего цветов: {len(flower_list)}</p>
+        <ol>
+            {''.join('<li>' + f + '</li>' for f in flower_list)}
+        </ol>
+    </body>
+</html>
+'''
+
+
+# очистка списка
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return '''<!doctype html>
+<html>
+    <body>
+        <h1>Список цветов очищен</h1>
+        <a href="/lab2/all_flowers">Все цветы</a>
+    </body>
+</html>
+'''
+
+@app.route('/lab2/flowers/<int:flower_id>')
+def flowers1(flower_id):
+    if flower_id >= len(flower_list):
+        abort(404)
+    return f'''<!doctype html>
+<html>
+    <body>
+        <h1>Цветок №{flower_id}</h1>
+        <p>Название: {flower_list[flower_id]}</p>
+        <a href="/lab2/all_flowers">Все цветы</a>
+    </body>
+</html>
+'''
+
+
+
+
+
 
 @app.route('/lab2/example')
 def example():
-    name, lab_num, group, course = 'Иван Иванов', 2, 'ФБИ-00', 3
+    name, lab_num, group, course = 'Соловьев Алексей', 3, 'ФБИ-41', 3
     fruits = ['яблоки', 'груши', 'апельсины', 'мандарины', 'манго']
     return render_template('example.html',
                            name=name, lab_num=lab_num,
@@ -363,3 +416,30 @@ def example():
 @app.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
+
+@app.route('/lab2/filters')
+def filters():
+    phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
+    return render_template('filter.html', phrase=phrase)
+
+
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    return render_template('calc.html', a=a, b=b)
+
+
+@app.route('/lab2/calc/')
+def calc_default():
+    return redirect('/lab2/calc/1/1')
+
+
+@app.route('/lab2/calc/<int:a>')
+def calc_one(a):
+    return redirect(f'/lab2/calc/{a}/1')
+
+
+
+
+
+
+
