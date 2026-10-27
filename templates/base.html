@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Соловьев Алексей. {% block lab %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='photo_5404427876674773272_x.jpg') }}">
+    
 </head>
 <body>
     <header>
+       <a href="/">На главную</a> |
         WEB-программирование, часть 2. {{ self.lab() }}
     </header>
 
