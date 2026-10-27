@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+    <h1>Картинки</h1>
+    {% for o in objects %}
+    <div style="margin-bottom: 20px;">
+        <img src="{{ url_for('static', filename=o.image) }}" alt="{{ o.name }}" width="200">
+        <h3>{{ o.name }}</h3>
+        <p>{{ o.desc }}</p>
+    </div>
+    {% endfor %}
+{% endblock %}
