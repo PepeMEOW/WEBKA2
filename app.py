@@ -15,6 +15,7 @@ def start():
             <body> 
                 <h1>web-сервер на flask</h1>
                 <a href="/lab1/author">author</a>
+                <a href="/lab2/">Вторая лабораторная</a>
             </body>
         </html>""", 200, {
             'X-Server': 'sample',
@@ -319,13 +320,19 @@ def a1():
 
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
-
-@app.route('/lab2/flower/<int:flower_id>')
-def flowers(flower_id):
+@app.route('/lab2/flowers/<int:flower_id>')
+def flowers1(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
-    else:
-        return "цветок:"+ flower_list[flower_id]
+    return f'''<!doctype html>
+<html>
+    <body>
+        <h1>Цветок №{flower_id}</h1>
+        <p>Название: {flower_list[flower_id]}</p>
+        <a href="/lab2/all_flowers">Все цветы</a>
+    </body>
+</html>
+'''
 
 @app.route('/lab2/add_flowers/<name>')
 def add_flower(name):
@@ -377,19 +384,6 @@ def clear_flowers():
 </html>
 '''
 
-@app.route('/lab2/flowers/<int:flower_id>')
-def flowers1(flower_id):
-    if flower_id >= len(flower_list):
-        abort(404)
-    return f'''<!doctype html>
-<html>
-    <body>
-        <h1>Цветок №{flower_id}</h1>
-        <p>Название: {flower_list[flower_id]}</p>
-        <a href="/lab2/all_flowers">Все цветы</a>
-    </body>
-</html>
-'''
 
 
 
@@ -486,5 +480,6 @@ objects = [
 @app.route('/lab2/objects')
 def show_objects():
     return render_template('objects.html', objects=objects)
+
 
 
