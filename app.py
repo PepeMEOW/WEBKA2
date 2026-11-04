@@ -252,7 +252,7 @@ def not_found(err):
     rows = ""
     for entry in reversed(log):
         rows += '''
-            <li>
+            <li>,
                 <span class="time">[''' + str(entry["time"]) + ''']</span>,
                 пользователь <b>''' + html.escape(entry["ip"]) + '''</b>
                 зашёл на адрес:

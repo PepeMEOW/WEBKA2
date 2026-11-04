@@ -11,13 +11,13 @@ main {
 header {
     margin-bottom: 30px;
     padding: 20px;
-    background: lightgray;
+    background: rgba(225, 13, 204, 0.149);
 }
 
 footer {
     margin-top: 20px;
     padding: 10px;
-    background: lightgray;
+    background: rgb(223, 67, 150);
     text-align: right;
     position: fixed;
     bottom: 0;
