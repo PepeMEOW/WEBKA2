@@ -1,6 +1,10 @@
 from flask import Flask, url_for, request, redirect, abort, render_template
 import datetime
+from lab1 import lab1
+from lab2 import lab2
 app = Flask(__name__)
+app.register_blueprint(lab1)
+app.register_blueprint(lab2)
 
 @app.errorhandler(404)
 def not_found(err):
@@ -8,7 +12,6 @@ def not_found(err):
 
 
 @app.route("/")
-@app.route("/lab1/web")
 def start():
     return """<!doctype html>" 
         <html> 
@@ -22,21 +25,8 @@ def start():
             'Content-type' : 'text/plain; charset=utf-8'
         }
 
-@app.route("/lab1/author")
-def author():
-    name = "Соловьев Алексей Валентинович"
-    group = "ФБИ-41"
-    faculty = "ФБ"
 
-    return """<!doctype html>
-        <html>
-            <body>
-                <p>Студент: """ + name + """</p>
-                <p>Группа: """ + group + """</p>
-                <p>Факультет: """ + faculty + """</p>
-                <a href="/lab1/web">web</a>
-            </body>
-        </html>"""
+
 
 def image_page(title, lang):
     path = url_for("static", filename="Slon.jpg")
@@ -53,77 +43,6 @@ def image_page(title, lang):
 </html>
 '''
 
-@app.route("/lab1/image")
-def image():
-    return image_page("Слон", "ru"), 200, {
-        'Content-Language': 'ru', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
-
-@app.route("/lab1/image/en")
-def image_en():
-    return image_page("Elephant", "en"), 200, {
-        'Content-Language': 'en', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
-
-@app.route("/lab1/image/de")
-def image_de():
-    return image_page("Elefant", "de"), 200, {
-        'Content-Language': 'de', 'X-Author': 'Solovev', 'X-Lab': 'lab1'}
-
-count = 0 
-
-@app.route('/lab1/counter')
-def counter():
-    global count
-    count += 1
-    time = datetime.datetime.today()
-    url = request.url
-    client_ip = request.remote_addr
-    
-    return '''
-<!doctype html>
-<html>
-    <head>
-    </head>
-    <body>
-       Сколько раз вы сюда заходили: ''' + str(count) + '''
-       <hr>
-        Дата и время: ''' + str(time) + '''<br>
-        Запрошенный адрес: ''' + url + '''<br>
-        Ваш IP-адрес: ''' + client_ip + '''<br>
-        <a href="/lab1/reset_counter">Очистить счётчик</a>
-    </body>
-</html>
-'''
-
-@app.route("/lab1/info")
-def info():
-    return redirect("/lab1/author")
-
-@app.route("/lab1/created")
-def created():
-    return '''
-<!doctype html>
-<html>
-    <body>
-        <h1>Создано успешно</h1>
-        <div><i>что-то создано...</i></div>
-    </body>
-</html>
-''',201
-
-@app.route("/lab1/reset_counter")
-def reset_counter():
-    global count
-    count = 0
-    return '''<!doctype html>
-<html>
-    <body>
-        <h1>Счётчик очищен</h1>
-        <a href="/lab1/counter">Вернуться к счётчику</a>
-    </body>
-</html>
-'''
-
-
 @app.route("/")
 @app.route("/index")
 def index():
@@ -139,6 +58,7 @@ def index():
         <main>
             <ul>
                 <li><a href="/lab1">Первая лабораторная</a></li>
+                <li><a href="/lab2">Вторая лабораторная</a></li>
             </ul>
         </main>
         <footer>
@@ -148,90 +68,6 @@ def index():
     </body>
 </html>
 '''
-
-
-@app.route("/lab1")
-def lab1():
-    return '''<!doctype html>
-<html>
-    <head>
-        <title>Лабораторная 1</title>
-    </head>
-    <body>
-        <p>Простота — необходимое условие надёжности.</p>
-        <p><i>Эдсгер Дейкстра</i></p>
-        <a href="/">На главную</a>
-    </body>
-</html>
-'''
-
-
-@app.route("/lab1/400")
-def code_400():
-    return "<h1>400 Bad Request</h1><p>Неверный запрос.</p>", 400
-
-@app.route("/lab1/401")
-def code_401():
-    return "<h1>401 Unauthorized</h1><p>Требуется авторизация.</p>", 401
-
-@app.route("/lab1/402")
-def code_402():
-    return "<h1>402 Payment Required</h1><p>Необходима оплата.</p>", 402
-
-@app.route("/lab1/403")
-def code_403():
-    return "<h1>403 Forbidden</h1><p>Доступ запрещён.</p>", 403
-
-@app.route("/lab1/405")
-def code_405():
-    return "<h1>405 Method Not Allowed</h1><p>Метод не разрешён.</p>", 405
-
-@app.route("/lab1/418")
-def code_418():
-    return "<h1>418 I'm a teapot</h1><p>Я чайник.</p>", 418
-
-@app.errorhandler(404)
-def not_found(err):
-    img = url_for("static", filename="404.jpg")
-    return '''<!doctype html>
-<html>
-    <head>
-        <title>Страница не найдена</title>
-        <style>
-            body { background: #fff4e6; text-align: center; font-family: Arial, sans-serif; }
-            h1 { font-size: 64px; }
-            img { width: 400px; }
-        </style>
-    </head>
-    <body>
-        <h1>404</h1>
-        <p>Упс! Такой страницы у нас нет.</p>
-        <img src="''' + img + '''">
-        <p><a href="/">На главную</a></p>
-    </body>
-</html>
-''', 404
-
-
-@app.route("/lab1/error")
-def make_error():
-    return 1 / 0
-
-@app.errorhandler(500)
-def internal_error(err):
-    return '''<!doctype html>
-<html lang="ru">
-    <head>
-        <title>Ошибка сервера</title>
-    </head>
-    <body>
-        <h1>Ошибка 500</h1>
-        <p>На сервере произошла ошибка.</p>
-        <a href="/">На главную</a>
-    </body>
-</html>
-''', 500, {'Content-Language': 'ru'}
-
 
 
 import html
@@ -307,179 +143,7 @@ def clear_log():
 
 
 
-#Начало второй лабы
 
-@app.route('/lab2/a')
-def a():
-    return 'без слэша'
-
-@app.route('/lab2/a/')
-def a1():
-    return 'со слэшем'
-
-
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
-
-@app.route('/lab2/flowers/<int:flower_id>')
-def flowers1(flower_id):
-    if flower_id >= len(flower_list):
-        abort(404)
-    return f'''<!doctype html>
-<html>
-    <body>
-        <h1>Цветок №{flower_id}</h1>
-        <p>Название: {flower_list[flower_id]}</p>
-        <a href="/lab2/all_flowers">Все цветы</a>
-    </body>
-</html>
-'''
-
-@app.route('/lab2/add_flowers/<name>')
-def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name} </p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}</p>
-    </body>
-</html>
-'''
-
-# цветок без имени  400
-@app.route('/lab2/add_flower/')
-def add_flower_empty():
-    return 'вы не задали имя цветка', 400
-
-
-# все цветы и их количество
-@app.route('/lab2/all_flowers')
-def all_flowers():
-    return f'''<!doctype html>
-<html>
-    <body>
-        <h1>Все цветы</h1>
-        <p>Всего цветов: {len(flower_list)}</p>
-        <ol>
-            {''.join('<li>' + f + '</li>' for f in flower_list)}
-        </ol>
-    </body>
-</html>
-'''
-
-
-# очистка списка
-@app.route('/lab2/clear_flowers')
-def clear_flowers():
-    flower_list.clear()
-    return '''<!doctype html>
-<html>
-    <body>
-        <h1>Список цветов очищен</h1>
-        <a href="/lab2/all_flowers">Все цветы</a>
-    </body>
-</html>
-'''
-
-
-
-
-
-
-
-@app.route('/lab2/example')
-def example():
-    name, lab_num, group, course = 'Соловьев Алексей', 3, 'ФБИ-41', 3
-    fruits = ['яблоки', 'груши', 'апельсины', 'мандарины', 'манго']
-    return render_template('example.html',
-                           name=name, lab_num=lab_num,
-                           group=group, course=course,
-                           fruits = [
-        {'name': 'яблоки', 'price': 100},
-        {'name': 'груши', 'price': 120},
-        {'name': 'апельсины', 'price': 80},
-        {'name': 'мандарины', 'price': 95},
-        {'name': 'манго', 'price': 321}
-    ])
-
-
-
-@app.route('/lab2/')
-def lab2():
-    return render_template('lab2.html')
-
-@app.route('/lab2/filters')
-def filters():
-    phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase=phrase)
-
-
-@app.route('/lab2/calc/<int:a>/<int:b>')
-def calc(a, b):
-    return render_template('calc.html', a=a, b=b)
-
-
-@app.route('/lab2/calc/')
-def calc_default():
-    return redirect('/lab2/calc/1/1')
-
-
-@app.route('/lab2/calc/<int:a>')
-def calc_one(a):
-    return redirect(f'/lab2/calc/{a}/1')
-
-
-
-books = [
-    {'author': 'Фёдор Достоевский', 'title': 'Преступление и наказание', 'genre': 'Роман', 'pages': 672},
-    {'author': 'Лев Толстой', 'title': 'Война и мир', 'genre': 'Роман-эпопея', 'pages': 1300},
-    {'author': 'Михаил Булгаков', 'title': 'Мастер и Маргарита', 'genre': 'Роман', 'pages': 480},
-    {'author': 'Александр Пушкин', 'title': 'Евгений Онегин', 'genre': 'Роман в стихах', 'pages': 224},
-    {'author': 'Николай Гоголь', 'title': 'Мёртвые души', 'genre': 'Поэма', 'pages': 352},
-    {'author': 'Иван Тургенев', 'title': 'Отцы и дети', 'genre': 'Роман', 'pages': 288},
-    {'author': 'Антон Чехов', 'title': 'Вишнёвый сад', 'genre': 'Пьеса', 'pages': 96},
-    {'author': 'Джордж Оруэлл', 'title': '1984', 'genre': 'Антиутопия', 'pages': 328},
-    {'author': 'Рэй Брэдбери', 'title': '451 градус по Фаренгейту', 'genre': 'Фантастика', 'pages': 256},
-    {'author': 'Артур Конан Дойл', 'title': 'Этюд в багровых тонах', 'genre': 'Детектив', 'pages': 192},
-]
-
-
-@app.route('/lab2/books')
-def show_books():
-    return render_template('book.html', books=books)
-
-
-objects = [
-    {'name': 'Весёлый мужчина', 'image': 'photo_5404427876674773285_x.jpg', 'desc': 'Красивый весёлый мужчина.'},
-    {'name': 'Подсолнухи', 'image': 'photo_5404427876674773266_x.jpg', 'desc': 'Весёлый мужчина на фоне подсолнухов.'},
-    {'name': 'Пришелец', 'image': 'photo_5404427876674773265_x.jpg', 'desc': 'Пришелец.'},
-    {'name': 'Котик в галстуке', 'image': 'photo_5404427876674773273_x.jpg', 'desc': 'Котик в галстуке.'},
-    {'name': 'Модная свинка', 'image': 'photo_5386421806106877763_x.jpg', 'desc': 'Модная свинка.'},
-    {'name': 'Читающая игрушка', 'image': 'photo_5404427876674773267_y.jpg', 'desc': 'Игрушка читает книжку.'},
-    {'name': 'Недовольный мужчина', 'image': 'photo_5404427876674773268_y.jpg', 'desc': 'Недовольный мужчина.'},
-    {'name': 'Дмитрий Нагиев', 'image': 'photo_5404427876674773269_y.jpg', 'desc': 'Дмитрий Нагиев.'},
-    {'name': 'На фоне Кремля', 'image': 'photo_5404427876674773270_x.jpg', 'desc': 'Дмитрий Брекоткин на фоне Кремля.'},
-    {'name': 'Влад', 'image': 'photo_5404427876674773271_x.jpg', 'desc': 'Это Влад.'},
-    {'name': 'Котик в очках', 'image': 'photo_5404427876674773272_x.jpg', 'desc': 'Крутой котик в очках.'},
-    {'name': 'Собачка король', 'image': 'photo_5404427876674773274_x.jpg', 'desc': 'Собачка король.'},
-    {'name': 'Свинка гангстер', 'image': 'photo_5404427876674773275_x.jpg', 'desc': 'Свинка гангстер.'},
-    {'name': 'Мопсик супергерой', 'image': 'photo_5404427876674773276_x.jpg', 'desc': 'Мопсик супергерой.'},
-    {'name': 'Домик', 'image': 'photo_5404427876674773277_x.jpg', 'desc': 'Домик в игре.'},
-    {'name': 'Нян кет', 'image': 'photo_5404427876674773278_x.jpg', 'desc': 'Нян кет радужная.'},
-    {'name': 'Свинка в окне', 'image': 'photo_5404427876674773280_x.jpg', 'desc': 'Морская свинка за окошком.'},
-    {'name': 'Angry Birds', 'image': 'photo_5404427876674773281_x.jpg', 'desc': 'Энгри бердс очень крутой.'},
-    {'name': 'Шоколадка', 'image': 'photo_5404427876674773282_x.jpg', 'desc': 'Шоколадка.'},
-    {'name': 'Мужчина в парке', 'image': 'photo_5404427876674773283_y.jpg', 'desc': 'Мужчина в парке.'},
-    {'name': 'Улыбка', 'image': 'Slon.jpg', 'desc': 'Дмитрий Брекоткин улыбается.'},
-]
-
-
-@app.route('/lab2/objects')
-def show_objects():
-    return render_template('objects.html', objects=objects)
 
 
 
